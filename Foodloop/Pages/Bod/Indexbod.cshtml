@@ -1,0 +1,51 @@
+@page
+@model Foodloop.Pages.Boder.IndexModel
+@using Foodloop.Models
+
+<h2>Alle boder</h2>
+
+<div class="list-group">
+    @foreach (var bod in Model.Boder)
+    {
+        <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2">
+            <!-- Venstre side: Navn og kategori -->
+            <div>
+                <!-- farvet prik alt efter status -->
+                <span style="font-size:1.2em; color:@GetStatusColor(bod.Status)">●</span>
+                <strong>@bod.Navn</strong><br />
+                <small>@bod.Kategori</small>
+            </div>
+
+            <!-- Højre side: Status + Se menu knap -->
+            <div>
+                @if (bod.Status == BodStatus.Aaben)
+                {
+                    <span class="badge bg-success me-2">Åben</span>
+                }
+                else if (bod.Status == BodStatus.Optaget)
+                {
+                    <span class="badge bg-warning text-dark me-2">Optaget</span>
+                }
+                else if (bod.Status == BodStatus.Lukket)
+                {
+                    <span class="badge bg-danger me-2">Lukket</span>
+                }
+
+                <a asp-page="Menu" asp-route-id="@bod.Id" class="btn btn-dark">Se menu</a>
+            </div>
+        </div>
+    }
+</div>
+
+@functions {
+    private string GetStatusColor(Foodloop.Models.BodStatus status)
+    {
+        return status switch
+        {
+            Foodloop.Models.BodStatus.Aaben => "green",
+            Foodloop.Models.BodStatus.Optaget => "goldenrod",
+            Foodloop.Models.BodStatus.Lukket => "red",
+            _ => "gray"
+        };
+    }
+}
