@@ -1,60 +1,40 @@
-namespace Foodloop.Models;
-
-public enum BodStatus
+namespace Foodloop.Models
 {
-    Aaben,
-    Optaget,
-    Lukket
-}
-
-public class Bod
-{
-    // Felter
-    private int _id;
-    private string _navn;
-    private string _kategori;
-    private BodStatus _status;
-
-    // Properties
-    public int Id
+    public enum BodStatus
     {
-        get { return _id; }
-        set { _id = value; }
+        Aaben,
+        Optaget,
+        Lukket
     }
 
-    public string Navn
+    public class Bod
     {
-        get { return _navn; }
-        set { _navn = value; }
-    }
+        // Properties
+        public int Id { get; set; }
+        public string Navn { get; set; } = string.Empty;
 
-    public string Kategori
-    {
-        get { return _kategori; }
-        set { _kategori = value; }
-    }
+        // Kategori kan være en bredere inddeling (fx "Streetfood")
+        public string Kategori { get; set; } = string.Empty;
 
-    public BodStatus Status
-    {
-        get { return _status; }
-        set { _status = value; }
-    }
+        // MadType mere specifik (fx "Sushi", "Vegan")
 
-    // Default constructor
-    public Bod()
-    {
-        _id = 0;
-        _navn = "";
-        _kategori = "";
-        _status = BodStatus.Aaben;
-    }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
-    // Parameterized constructor
-    public Bod(int id, string navn, string kategori, BodStatus status)
-    {
-        _id = id;
-        _navn = navn;
-        _kategori = kategori;
-        _status = status;
+        public BodStatus Status { get; set; } = BodStatus.Aaben;
+
+        // Default constructor
+        public Bod() { }
+
+        // Parameterized constructor
+        public Bod(int id, string navn, string kategori, double latitude, double longitude, BodStatus status)
+        {
+            Id = id;
+            Navn = navn;
+            Kategori = kategori;
+            Latitude = latitude;
+            Longitude = longitude;
+            Status = status;
+        }
     }
 }

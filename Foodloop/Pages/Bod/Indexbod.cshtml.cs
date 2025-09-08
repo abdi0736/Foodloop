@@ -11,12 +11,11 @@ public class IndexModel : PageModel
     {
         Boder = new List<Models.Bod>
         {
-            new Models.Bod(1, "Pizza Palace", "Italiensk", BodStatus.Aaben),
-            new Models.Bod(2, "Burger Bar", "Amerikansk", BodStatus.Optaget),
-            new Models.Bod(3, "Taco Town", "Mexicansk", BodStatus.Aaben),
-            new Models.Bod(4, "Sushi Station", "Japansk", BodStatus.Aaben),
-            new Models.Bod(5, "Kaffe Kiosk", "Kaffe & Te", BodStatus.Lukket),
-            new Models.Bod(6, "Grillmester", "Grill", BodStatus.Aaben)
+            new Models.Bod { Id = 1, Navn = "Pizza Palace", Kategori = "Sushimushi", Latitude = 55.6171, Longitude = 12.0796, Status = Models.BodStatus.Aaben },
+            new Models.Bod { Id = 2, Navn = "Burger Bar", Kategori = "KØD", Latitude = 55.6180, Longitude = 12.0785, Status = Models.BodStatus.Optaget },
+            new Models.Bod { Id = 3, Navn = "Sushi Station", Kategori = "Vegan", Latitude = 55.6165, Longitude = 12.0802, Status = Models.BodStatus.Aaben },
+            new Models.Bod { Id = 4, Navn = "Taco Town", Kategori = "Thai food", Latitude = 55.6177, Longitude = 12.0811, Status = Models.BodStatus.Lukket }
+
         };
     }
 }

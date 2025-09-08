@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/Foodloop.styles.css" asp-append-version="true"/>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
 <header>
@@ -23,10 +26,7 @@
                         <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                     </li>
                     <a asp-page="/Bod/Indexbod" class="btn btn-primary">Se boder</a>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                    </li>
+                    <a asp-page="/Bod/Privacy" class="btn btn-primary">Se kort</a>
                 </ul>
             </div>
         </div>
@@ -47,6 +47,7 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 @await RenderSectionAsync("Scripts", required: false)
 </body>
