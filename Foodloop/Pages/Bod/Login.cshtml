@@ -1,19 +1,76 @@
 @page
-@model Foodloop.Pages.Bod.Login
+@model Foodloop.Pages.Bod.LoginModel
 
 @{
-    Layout = null;
+Layout = null;
+ViewData["Title"] = "Login";
 }
 
-<!DOCTYPE html>
+<style>
+    body {
+        background: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+    .login-container {
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .login-container h2 {
+        margin-bottom: 30px;
+        font-weight: 600;
+        text-align: center;
+        color: #333;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .btn-primary {
+        border-radius: 8px;
+        padding: 10px;
+        font-weight: 500;
+        background-color: #007bff;
+        border: none;
+    }
+
+    .alert {
+        text-align: center;
+    }
+</style>
+
+<div class="login-container">
+    <h2>Login</h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="Email" name="Email"
+                   asp-for="Email" placeholder="Indtast email" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Password" class="form-label">Kodeord</label>
+            <input type="password" class="form-control" id="Password" name="Password"
+                   asp-for="Password" placeholder="Indtast kodeord" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Log ind</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+    <div class="alert alert-danger mt-3">@Model.Message</div>
+    }
 </div>
-</body>
-</html>
