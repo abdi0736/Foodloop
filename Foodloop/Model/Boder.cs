@@ -11,6 +11,8 @@ namespace Foodloop.Models
     {
         // Properties
         public int Id { get; set; }
+        
+        public int BodId { get; set; }
         public string Navn { get; set; } = string.Empty;
 
         // Kategori kan være en bredere inddeling (fx "Streetfood")
@@ -27,7 +29,7 @@ namespace Foodloop.Models
         public Bod() { }
 
         // Parameterized constructor
-        public Bod(int id, string navn, string kategori, double latitude, double longitude, BodStatus status)
+        public Bod(int id,int bodid, string navn, string kategori, double latitude, double longitude, BodStatus status)
         {
             Id = id;
             Navn = navn;
@@ -35,6 +37,8 @@ namespace Foodloop.Models
             Latitude = latitude;
             Longitude = longitude;
             Status = status;
+            BodId = bodid;
+
         }
     }
 }

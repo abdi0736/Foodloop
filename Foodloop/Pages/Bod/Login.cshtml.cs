@@ -44,7 +44,7 @@ namespace Foodloop.Pages.Bod
             if (reader.Read())
             {
                 // Kunde fundet → redirect til KundeDashboard
-                return RedirectToPage("/KundeDashboard");
+                return RedirectToPage("/KundeDashboard"); // Hvis KundeDashboard ligger under Pages/
             }
             reader.Close();
 
@@ -60,7 +60,7 @@ namespace Foodloop.Pages.Bod
             if (reader2.Read())
             {
                 // Bod fundet → redirect til AdminDashboard
-                return RedirectToPage("/AdminDashboard");
+                return RedirectToPage("/Bod/AdminDashboard"); // <-- Rettet sti
             }
 
             // 3) Ingen match

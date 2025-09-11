@@ -1,19 +1,73 @@
 @page
-@model Foodloop.Pages.Bod.AdminDashboard
+@model Foodloop.Pages.Bod.AdminDashboardModel
+@using Foodloop.Models
 
-@{
-    Layout = null;
-}
+<h2>Admin Dashboard</h2>
 
-<!DOCTYPE html>
+<!-- Tilføj Bod -->
+<h4>Tilføj ny bod</h4>
+<form method="post" asp-page-handler="AddBod" class="mb-4">
+    <div class="mb-2">
+        <input type="text" class="form-control" placeholder="Navn" asp-for="NewBod.Navn" required />
+    </div>
+    <div class="mb-2">
+        <input type="text" class="form-control" placeholder="Kategori" asp-for="NewBod.Kategori" required />
+    </div>
+    <select asp-for="NewBod.Status" class="form-select mb-2">
+        <option value="Åben">Åben</option>
+        <option value="Optaget">Optaget</option>
+        <option value="Lukket">Lukket</option>
+    </select>
+    <button type="submit" class="btn btn-success">Tilføj Bod</button>
+</form>
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+<hr />
+
+<!-- Liste af boder -->
+<div class="list-group">
+    @foreach (var bod in Model.Boder)
+    {
+    <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2">
+        <div>
+            <span style="font-size:1.2em; color:@GetStatusColor(bod.Status)">●</span>
+            <strong>@bod.Navn</strong><br />
+            <small>@bod.Kategori</small>
+        </div>
+
+        <div class="d-flex gap-2">
+            <!-- Ændre status -->
+            <form method="post" asp-page-handler="ChangeStatus" class="d-inline">
+                <input type="hidden" name="BodId" value="@bod.Id" />
+                <select name="NewStatus" class="form-select form-select-sm">
+                    <option value="Aaben" selected="@(bod.Status == BodStatus.Aaben ? "selected" : "")">Åben</option>
+                    <option value="Optaget" selected="@(bod.Status == BodStatus.Optaget ? "selected" : "")">Optaget</option>
+                    <option value="Lukket" selected="@(bod.Status == BodStatus.Lukket ? "selected" : "")">Lukket</option>
+                </select>
+                <button type="submit" class="btn btn-primary btn-sm">Opdater</button>
+            </form>
+
+            <!-- Slet bod -->
+            <form method="post" asp-page-handler="DeleteBod" class="d-inline">
+                <input type="hidden" name="BodId" value="@bod.Id" />
+                <button type="submit" class="btn btn-danger btn-sm">Slet</button>
+            </form>
+
+            <!-- Tilføj madvarer -->
+            <a asp-page="AddMad" asp-route-bodId="@bod.Id" class="btn btn-dark btn-sm">Tilføj mad</a>
+        </div>
+    </div>
+    }
 </div>
-</body>
-</html>
+
+@functions {
+private string GetStatusColor(BodStatus status)
+{
+return status switch
+{
+BodStatus.Aaben => "green",
+BodStatus.Optaget => "goldenrod",
+BodStatus.Lukket => "red",
+_ => "gray"
+};
+}
+}
