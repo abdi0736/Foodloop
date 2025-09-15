@@ -1,0 +1,28 @@
+@page
+@model Foodloop.Pages.Kunde.LoginModel
+@{
+    ViewData["Title"] = "Kunde Login";
+}
+
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="text-center mb-4">Kunde Login</h2>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-warning">@Model.Message</div>
+    }
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="armband" class="form-label">Armbåndskode</label>
+            <input asp-for="ArmbandKode" class="form-control" id="armband" placeholder="Indtast armbåndskode" />
+        </div>
+
+        <div class="mb-3">
+            <label for="adgangskode" class="form-label">Adgangskode</label>
+            <input asp-for="Adgangskode" class="form-control" id="adgangskode" type="password" placeholder="Indtast adgangskode" />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+</div>

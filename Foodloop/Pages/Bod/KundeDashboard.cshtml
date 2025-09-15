@@ -1,0 +1,24 @@
+@page "{armbandKode?}"
+@model Foodloop.Pages.Kunde.KundeDashboardModel
+@{
+    ViewData["Title"] = "Kunde Dashboard";
+}
+
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="text-center mb-4">Kunde Dashboard</h2>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-warning">@Model.Message</div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Velkommen, @Model.Efternavn</h5>
+                <p><strong>Armbåndskode:</strong> @Model.ArmbandKode</p>
+                <p><strong>Telefon:</strong> @Model.Telefon</p>
+            </div>
+        </div>
+    }
+</div>

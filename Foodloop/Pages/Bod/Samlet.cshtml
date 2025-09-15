@@ -1,0 +1,94 @@
+@page
+@using Foodloop.Models
+@model Foodloop.Pages.PrivacyModel
+@{
+    ViewData["Title"] = "Festival App - Kunde";
+}
+
+<div class="container my-4">
+    <h1 class="text-center mb-4">Festival App - Kunde</h1>
+
+    <!-- Kort over området -->
+    <div id="map" 
+         style="height: 390px; width: 80%; max-width: 700px; margin: 0 auto 30px auto; border-radius: 10px;">
+    </div> 
+
+    <!-- Liste over alle boder -->
+    <h2>Alle boder</h2>
+    <div class="list-group">
+        @foreach (var bod in Model.Boder)
+        {
+            <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2">
+                <!-- Venstre side -->
+                <div>
+                    <span style="font-size:1.2em; color:@GetStatusColor(bod.Status)">●</span>
+                    <strong>@bod.Navn</strong><br />
+                    <small>@bod.Kategori</small><br />
+                    <small>@bod.Lokation</small>
+                </div>
+
+                <!-- Højre side -->
+                <div>
+                    @if (bod.Status == BodStatus.Aaben)
+                    {
+                        <span class="badge bg-success me-2">Åben</span>
+                    }
+                    else if (bod.Status == BodStatus.Optaget)
+                    {
+                        <span class="badge bg-warning text-dark me-2">Optaget</span>
+                    }
+                    else if (bod.Status == BodStatus.Lukket)
+                    {
+                        <span class="badge bg-danger me-2">Lukket</span>
+                    }
+
+                    <a asp-page="Menu" asp-route-id="@bod.Id" class="btn btn-dark">Se menu</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Initier Leaflet-kort
+    var map = L.map('map').setView([55.6171, 12.0796], 17);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Hent boder fra server (liste fra C# model → JS array)
+    var boder = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Boder ?? new List<Bod>()));
+
+    // Tilføj markører til kortet
+    boder.forEach(function (bod) {
+        var popupContent = `
+            <b>${bod.Navn}</b><br/>
+            Kategori: ${bod.Kategori}<br/>
+            Status: ${bod.Status}<br/>
+            Lokation: ${bod.Lokation}
+        `;
+
+        // OBS: kræver Latitude/Longitude i databasen, ellers sættes marker ved [0,0]
+        if (bod.Latitude && bod.Longitude) {
+            L.marker([bod.Latitude, bod.Longitude])
+                .addTo(map)
+                .bindPopup(popupContent);
+        }
+    });
+</script>
+}
+
+@functions {
+    private string GetStatusColor(BodStatus status)
+    {
+        return status switch
+        {
+            BodStatus.Aaben => "green",
+            BodStatus.Optaget => "goldenrod",
+            BodStatus.Lukket => "red",
+            _ => "gray"
+        };
+    }
+}

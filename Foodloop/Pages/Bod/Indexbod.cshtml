@@ -8,15 +8,12 @@
     @foreach (var bod in Model.Boder)
     {
         <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2">
-            <!-- Venstre side: Navn og kategori -->
             <div>
-                <!-- farvet prik alt efter status -->
                 <span style="font-size:1.2em; color:@GetStatusColor(bod.Status)">●</span>
                 <strong>@bod.Navn</strong><br />
                 <small>@bod.Kategori</small>
             </div>
 
-            <!-- Højre side: Status + Se menu knap -->
             <div>
                 @if (bod.Status == BodStatus.Aaben)
                 {
@@ -38,13 +35,13 @@
 </div>
 
 @functions {
-    private string GetStatusColor(Foodloop.Models.BodStatus status)
+    private string GetStatusColor(BodStatus status)
     {
         return status switch
         {
-            Foodloop.Models.BodStatus.Aaben => "green",
-            Foodloop.Models.BodStatus.Optaget => "goldenrod",
-            Foodloop.Models.BodStatus.Lukket => "red",
+            BodStatus.Aaben => "green",
+            BodStatus.Optaget => "goldenrod",
+            BodStatus.Lukket => "red",
             _ => "gray"
         };
     }

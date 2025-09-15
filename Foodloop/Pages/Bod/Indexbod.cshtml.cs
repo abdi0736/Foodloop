@@ -1,21 +1,41 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Data.SqlClient;
 using Foodloop.Models;
 
 namespace Foodloop.Pages.Boder;
 
 public class IndexModel : PageModel
 {
+    private readonly string _connectionString =
+        "Server=mssql17.unoeuro.com,1433;Database=kunforhustlers_dk_db_test;User Id=kunforhustlers_dk;Password=RmcAfptngeBaxkw6zr5E;TrustServerCertificate=True;Encrypt=True;";
+
     public List<Models.Bod> Boder { get; set; } = new();
 
     public void OnGet()
     {
-        Boder = new List<Models.Bod>
-        {
-            new Models.Bod { Id = 1, Navn = "Pizza Palace", Kategori = "Sushimushi", Latitude = 55.6171, Longitude = 12.0796, Status = Models.BodStatus.Aaben },
-            new Models.Bod { Id = 2, Navn = "Burger Bar", Kategori = "KØD", Latitude = 55.6180, Longitude = 12.0785, Status = Models.BodStatus.Optaget },
-            new Models.Bod { Id = 3, Navn = "Sushi Station", Kategori = "Vegan", Latitude = 55.6165, Longitude = 12.0802, Status = Models.BodStatus.Aaben },
-            new Models.Bod { Id = 4, Navn = "Taco Town", Kategori = "Thai food", Latitude = 55.6177, Longitude = 12.0811, Status = Models.BodStatus.Lukket }
+        Boder.Clear();
 
-        };
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+
+        var cmd = new SqlCommand("SELECT BodId, Navn, Kategori, Status FROM Boder", conn);
+        using var reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+        {
+            var statusString = reader.IsDBNull(3) ? "Aaben" : reader.GetString(3);
+            if (statusString == "Åben") statusString = "Aaben";
+
+            if (!Enum.TryParse<BodStatus>(statusString, out var status))
+                status = BodStatus.Aaben;
+
+            Boder.Add(new Models.Bod
+            {
+                Id = reader.GetInt32(0),
+                Navn = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                Kategori = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                Status = status
+            });
+        }
     }
 }
