@@ -7,14 +7,14 @@
 <!-- Tilføj Bod -->
 <h4>Tilføj ny bod</h4>
 <form method="post" asp-page-handler="AddBod" class="mb-4">
-    <div class="mb-2">
-        <input type="text" class="form-control" placeholder="Navn" asp-for="NewBod.Navn" required />
-    </div>
-    <div class="mb-2">
-        <input type="text" class="form-control" placeholder="Kategori" asp-for="NewBod.Kategori" required />
-    </div>
+    <input type="text" class="form-control mb-2" placeholder="Navn" asp-for="NewBod.Navn" required />
+    <input type="text" class="form-control mb-2" placeholder="Kategori" asp-for="NewBod.Kategori" required />
+    <input type="text" class="form-control mb-2" placeholder="Lokation" asp-for="NewBod.Lokation" />
+    <input type="text" class="form-control mb-2" placeholder="Kontaktinfo" asp-for="NewBod.Kontaktinfo" />
+    <input type="email" class="form-control mb-2" placeholder="Email" asp-for="NewBod.Email" />
+    <input type="text" class="form-control mb-2" placeholder="LoginKode" asp-for="NewBod.LoginKode" />
     <select asp-for="NewBod.Status" class="form-select mb-2">
-        <option value="Åben">Åben</option>
+        <option value="Aaben">Åben</option>
         <option value="Optaget">Optaget</option>
         <option value="Lukket">Lukket</option>
     </select>
@@ -30,15 +30,15 @@
     <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2">
         <div>
             <span style="font-size:1.2em; color:@GetStatusColor(bod.Status)">●</span>
-            <strong>@bod.Navn</strong><br />
-            <small>@bod.Kategori</small>
+            <strong>@bod.Navn</strong> (<small>@bod.Kategori</small>)<br />
+            <small>Lokation: @bod.Lokation | Kontakt: @bod.Kontaktinfo | Email: @bod.Email</small>
         </div>
 
         <div class="d-flex gap-2">
             <!-- Ændre status -->
             <form method="post" asp-page-handler="ChangeStatus" class="d-inline">
-                <input type="hidden" name="BodId" value="@bod.Id" />
-                <select name="NewStatus" class="form-select form-select-sm">
+                <input type="hidden" asp-for="BodId" value="@bod.BodId" />
+                <select asp-for="NewStatus" class="form-select form-select-sm">
                     <option value="Aaben" selected="@(bod.Status == BodStatus.Aaben ? "selected" : "")">Åben</option>
                     <option value="Optaget" selected="@(bod.Status == BodStatus.Optaget ? "selected" : "")">Optaget</option>
                     <option value="Lukket" selected="@(bod.Status == BodStatus.Lukket ? "selected" : "")">Lukket</option>
@@ -46,14 +46,30 @@
                 <button type="submit" class="btn btn-primary btn-sm">Opdater</button>
             </form>
 
-            <!-- Slet bod -->
-            <form method="post" asp-page-handler="DeleteBod" class="d-inline">
-                <input type="hidden" name="BodId" value="@bod.Id" />
-                <button type="submit" class="btn btn-danger btn-sm">Slet</button>
+
+            <!-- Opdater Bod -->
+            <form method="post" asp-page-handler="UpdateBod" class="d-inline">
+                <input type="hidden" asp-for="BodId" value="@bod.BodId" />
+                <input type="text" name="NewBod.Navn" value="@bod.Navn" class="form-control form-control-sm mb-1" />
+                <input type="text" name="NewBod.Kategori" value="@bod.Kategori" class="form-control form-control-sm mb-1" />
+                <input type="text" name="NewBod.Lokation" value="@bod.Lokation" class="form-control form-control-sm mb-1" />
+                <input type="text" name="NewBod.Kontaktinfo" value="@bod.Kontaktinfo" class="form-control form-control-sm mb-1" />
+                <input type="email" name="NewBod.Email" value="@bod.Email" class="form-control form-control-sm mb-1" />
+                <input type="text" name="NewBod.LoginKode" value="@bod.LoginKode" class="form-control form-control-sm mb-1" />
+                <select name="NewBod.Status" class="form-select form-select-sm mb-1">
+                    <option value="Aaben" selected="@(bod.Status == BodStatus.Aaben ? "selected" : "")">Åben</option>
+                    <option value="Optaget" selected="@(bod.Status == BodStatus.Optaget ? "selected" : "")">Optaget</option>
+                    <option value="Lukket" selected="@(bod.Status == BodStatus.Lukket ? "selected" : "")">Lukket</option>
+                </select>
+                <button type="submit" class="btn btn-warning btn-sm">Opdater Bod</button>
             </form>
 
-            <!-- Tilføj madvarer -->
-            <a asp-page="AddMad" asp-route-bodId="@bod.Id" class="btn btn-dark btn-sm">Tilføj mad</a>
+
+            <!-- Slet bod -->
+            <form method="post" asp-page-handler="DeleteBod" class="d-inline">
+                <input type="hidden" name="BodId" value="@bod.BodId" />
+                <button type="submit" class="btn btn-danger btn-sm">Slet</button>
+            </form>
         </div>
     </div>
     }
@@ -71,4 +87,3 @@ _ => "gray"
 };
 }
 }
-

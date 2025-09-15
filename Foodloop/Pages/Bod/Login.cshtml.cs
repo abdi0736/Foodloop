@@ -13,13 +13,11 @@ namespace Foodloop.Pages.Bod
         public string Email { get; set; } = string.Empty;
 
         [BindProperty]
-        public string Password { get; set; } = string.Empty; // armbåndkode eller loginkode
+        public string Password { get; set; } = string.Empty; // LoginKode for bod
 
         public string Message { get; set; } = string.Empty;
 
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
 
         public IActionResult OnPost()
         {
@@ -32,23 +30,7 @@ namespace Foodloop.Pages.Bod
             using var conn = new SqlConnection(_connectionString);
             conn.Open();
 
-            // 1) Tjek Kunde (email + armbåndkode)
-            var cmdKunde = new SqlCommand(
-                "SELECT TOP 1 * FROM Kunder WHERE Email = @Email AND ArmbandKode = @Password",
-                conn
-            );
-            cmdKunde.Parameters.AddWithValue("@Email", Email);
-            cmdKunde.Parameters.AddWithValue("@Password", Password);
-
-            using var reader = cmdKunde.ExecuteReader();
-            if (reader.Read())
-            {
-                // Kunde fundet → redirect til KundeDashboard
-                return RedirectToPage("/KundeDashboard"); // Hvis KundeDashboard ligger under Pages/
-            }
-            reader.Close();
-
-            // 2) Tjek Bod (email + loginkode)
+            // Tjek Bod (Email + LoginKode)
             var cmdBod = new SqlCommand(
                 "SELECT TOP 1 * FROM Boder WHERE Email = @Email AND LoginKode = @Password",
                 conn
@@ -56,14 +38,14 @@ namespace Foodloop.Pages.Bod
             cmdBod.Parameters.AddWithValue("@Email", Email);
             cmdBod.Parameters.AddWithValue("@Password", Password);
 
-            using var reader2 = cmdBod.ExecuteReader();
-            if (reader2.Read())
+            using var reader = cmdBod.ExecuteReader();
+            if (reader.Read())
             {
                 // Bod fundet → redirect til AdminDashboard
-                return RedirectToPage("/Bod/AdminDashboard"); // <-- Rettet sti
+                return RedirectToPage("/Bod/AdminDashboard");
             }
 
-            // 3) Ingen match
+            // Ingen match
             Message = "Login mislykkedes – prøv igen.";
             return Page();
         }
