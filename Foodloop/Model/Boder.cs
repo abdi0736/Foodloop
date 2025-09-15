@@ -19,26 +19,35 @@ namespace Foodloop.Models
         public string Kategori { get; set; } = string.Empty;
 
         // MadType mere specifik (fx "Sushi", "Vegan")
-
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
         public BodStatus Status { get; set; } = BodStatus.Aaben;
 
+        // 🔹 Nye felter fra databasen
+        public string Lokation { get; set; } = string.Empty;
+        public string Kontaktinfo { get; set; } = string.Empty;
+        public string LoginKode { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+
         // Default constructor
         public Bod() { }
 
         // Parameterized constructor
-        public Bod(int id,int bodid, string navn, string kategori, double latitude, double longitude, BodStatus status)
+        public Bod(int id, int bodid, string navn, string kategori, double latitude, double longitude, BodStatus status,
+            string lokation, string kontaktinfo, string loginKode, string email)
         {
             Id = id;
+            BodId = bodid;
             Navn = navn;
             Kategori = kategori;
             Latitude = latitude;
             Longitude = longitude;
             Status = status;
-            BodId = bodid;
-
+            Lokation = lokation;
+            Kontaktinfo = kontaktinfo;
+            LoginKode = loginKode;
+            Email = email;
         }
     }
 }

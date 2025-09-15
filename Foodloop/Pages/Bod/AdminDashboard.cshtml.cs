@@ -38,9 +38,8 @@ public class AdminDashboardModel : PageModel
         {
             var statusString = reader.GetString(3);
 
-            // Fix: konverter "Åben" til "Aaben", så Enum.Parse ikke fejler
-            if (statusString == "Åben")
-                statusString = "Aaben";
+            // Map database value til enum
+            if (statusString == "Åben") statusString = "Aaben";
 
             Boder.Add(new Models.Bod
             {
@@ -58,12 +57,19 @@ public class AdminDashboardModel : PageModel
         conn.Open();
 
         var cmd = new SqlCommand(
-            "INSERT INTO Boder (Navn, Kategori, Status) VALUES (@Navn, @Kategori, @Status)",
+            @"INSERT INTO Boder (Navn, Lokation, Kontaktinfo, LoginKode, Email, Kategori, Status)  
+              VALUES (@Navn, @Lokation, @Kontaktinfo, @LoginKode, @Email, @Kategori, @Status)",
             conn
         );
+
         cmd.Parameters.AddWithValue("@Navn", NewBod.Navn);
-        cmd.Parameters.AddWithValue("@Kategori", NewBod.Kategori);
-        cmd.Parameters.AddWithValue("@Status", NewBod.Status.ToString());
+        cmd.Parameters.AddWithValue("@Lokation", NewBod.Lokation ?? "");
+        cmd.Parameters.AddWithValue("@Kontaktinfo", NewBod.Kontaktinfo ?? "");
+        cmd.Parameters.AddWithValue("@LoginKode", NewBod.LoginKode ?? "");
+        cmd.Parameters.AddWithValue("@Email", NewBod.Email ?? "");
+        cmd.Parameters.AddWithValue("@Kategori", NewBod.Kategori ?? "");
+        cmd.Parameters.AddWithValue("@Status", MapStatusToDb(NewBod.Status));
+
         cmd.ExecuteNonQuery();
 
         return RedirectToPage();
@@ -87,10 +93,22 @@ public class AdminDashboardModel : PageModel
         conn.Open();
 
         var cmd = new SqlCommand("UPDATE Boder SET Status=@Status WHERE BodId=@BodId", conn);
-        cmd.Parameters.AddWithValue("@Status", NewStatus.ToString());
+        cmd.Parameters.AddWithValue("@Status", MapStatusToDb(NewStatus));
         cmd.Parameters.AddWithValue("@BodId", BodId);
         cmd.ExecuteNonQuery();
 
         return RedirectToPage();
     }
-} 
+
+    // Mapper enum til database-værdi
+    private string MapStatusToDb(BodStatus status)
+    {
+        return status switch
+        {
+            BodStatus.Aaben => "Åben",
+            BodStatus.Optaget => "Optaget",
+            BodStatus.Lukket => "Lukket",
+            _ => "Åben"
+        };
+    }
+}
