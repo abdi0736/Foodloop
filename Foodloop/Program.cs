@@ -2,6 +2,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 
@@ -16,6 +19,8 @@ if (!app.Environment.IsDevelopment())
     
     //122
 }
+
+app.UseSession();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

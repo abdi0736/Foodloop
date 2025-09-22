@@ -9,11 +9,8 @@ namespace Foodloop.Pages.Kunde
         private readonly string _connectionString =
             "Server=mssql17.unoeuro.com,1433;Database=kunforhustlers_dk_db_test;User Id=kunforhustlers_dk;Password=RmcAfptngeBaxkw6zr5E;TrustServerCertificate=True;Encrypt=True;";
 
-        [BindProperty]
-        public string ArmbandKode { get; set; } = string.Empty;
-
-        [BindProperty]
-        public string Adgangskode { get; set; } = string.Empty;
+        [BindProperty] public string ArmbandKode { get; set; } = string.Empty;
+        [BindProperty] public string Adgangskode { get; set; } = string.Empty;
 
         public string Message { get; set; } = string.Empty;
 
@@ -33,7 +30,7 @@ namespace Foodloop.Pages.Kunde
             conn.Open();
 
             var cmd = new SqlCommand(
-                "SELECT TOP 1 * FROM Kunder WHERE ArmbandKode = @ArmbandKode AND Adgangskode = @Adgangskode",
+                "SELECT TOP 1 ArmbandKode, Efternavn, Telefon FROM Kunder WHERE ArmbandKode = @ArmbandKode AND Adgangskode = @Adgangskode",
                 conn
             );
             cmd.Parameters.AddWithValue("@ArmbandKode", ArmbandKode);
@@ -42,12 +39,23 @@ namespace Foodloop.Pages.Kunde
             using var reader = cmd.ExecuteReader();
             if (reader.Read())
             {
-                // Login lykkedes → send til kunde-dashboard
-                return RedirectToPage("/Bod/KundeDashboard", new { armbandKode = ArmbandKode });
+                // Gem i session
+                HttpContext.Session.SetString("ArmbandKode", reader.GetString(0));
+                HttpContext.Session.SetString("Efternavn", reader.GetString(1));
+                HttpContext.Session.SetString("Telefon", reader.GetString(2));
+
+                return RedirectToPage("/Bod/KundeDashboard");
             }
 
             Message = "Login mislykkedes – prøv igen.";
             return Page();
+        }
+
+        // Logout handler
+        public IActionResult OnPostLogout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToPage("/Bod/KundeLogin"); // sender tilbage til login
         }
     }
 }

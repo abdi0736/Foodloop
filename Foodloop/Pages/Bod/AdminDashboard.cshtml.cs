@@ -117,7 +117,7 @@ public class AdminDashboardModel : PageModel
     {
         if (!Enum.TryParse<BodStatus>(NewStatus, out var status))
         {
-            status = BodStatus.Aaben; // fallback hvis parsing fejler
+            status = BodStatus.Aaben;
         }
 
         using var conn = new SqlConnection(_connectionString);

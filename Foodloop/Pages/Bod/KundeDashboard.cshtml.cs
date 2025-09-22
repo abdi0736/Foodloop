@@ -15,34 +15,29 @@ namespace Foodloop.Pages.Kunde
 
         public string Message { get; set; } = string.Empty;
 
-        public void OnGet(string armbandKode)
+        public IActionResult OnGet()
         {
-            if (string.IsNullOrEmpty(armbandKode))
+            ArmbandKode = HttpContext.Session.GetString("ArmbandKode") ?? "";
+            Efternavn = HttpContext.Session.GetString("Efternavn") ?? "";
+            Telefon = HttpContext.Session.GetString("Telefon") ?? "";
+
+            if (string.IsNullOrEmpty(ArmbandKode))
             {
-                Message = "Ingen armbåndskode angivet.";
-                return;
+                // Ingen aktiv session → send tilbage til login
+                return RedirectToPage("/Bod/KundeLogin");
             }
 
-            using var conn = new SqlConnection(_connectionString);
-            conn.Open();
+            // Her kan du evt. hente kundens ordre fra databasen
+            return Page();
+        }
+        
+        public IActionResult OnPostLogout()
+        {
+            // ryd sessionen
+            HttpContext.Session.Clear();
 
-            var cmd = new SqlCommand(
-                "SELECT TOP 1 ArmbandKode, Efternavn, Telefon FROM Kunder WHERE ArmbandKode = @ArmbandKode",
-                conn
-            );
-            cmd.Parameters.AddWithValue("@ArmbandKode", armbandKode);
-
-            using var reader = cmd.ExecuteReader();
-            if (reader.Read())
-            {
-                ArmbandKode = reader.GetString(0);
-                Efternavn = reader.GetString(1);
-                Telefon = reader.GetString(2);
-            }
-            else
-            {
-                Message = "Kunde ikke fundet.";
-            }
+            // send tilbage til login-siden for kunde
+            return RedirectToPage("/Bod/KundeLogin");
         }
     }
 }
