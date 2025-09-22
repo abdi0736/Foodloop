@@ -1,24 +1,55 @@
-@page "{armbandKode?}"
+@page
 @model Foodloop.Pages.Kunde.KundeDashboardModel
 @{
     ViewData["Title"] = "Kunde Dashboard";
 }
 
-<div class="container mt-5" style="max-width: 600px;">
+<div class="container mt-5" style="max-width: 700px;">
     <h2 class="text-center mb-4">Kunde Dashboard</h2>
 
-    @if (!string.IsNullOrEmpty(Model.Message))
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Velkommen, @Model.Efternavn</h5>
+            <p><strong>Armbåndskode:</strong> @Model.ArmbandKode</p>
+            <p><strong>Telefon:</strong> @Model.Telefon</p>
+        </div>
+    </div>
+
+    <h4>Dine ordrer</h4>
+    @if (Model.Ordrer.Any())
     {
-        <div class="alert alert-warning">@Model.Message</div>
+        <div class="accordion" id="ordreAccordion">
+            @foreach (var ordre in Model.Ordrer)
+            {
+                <div class="accordion-item mb-2">
+                    <h2 class="accordion-header" id="heading-@ordre.OrdreID">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@ordre.OrdreID">
+                            Ordre #@ordre.OrdreID - @ordre.Dato.ToString("dd-MM-yyyy HH:mm")
+                        </button>
+                    </h2>
+                    <div id="collapse-@ordre.OrdreID" class="accordion-collapse collapse" data-bs-parent="#ordreAccordion">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                                @foreach (var linje in ordre.Linjer)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span>@linje.RetNavn (x@linje.Antal)</span>
+                                        <span>@linje.Pris.ToString("0.00") kr</span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     }
     else
     {
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Velkommen, @Model.Efternavn</h5>
-                <p><strong>Armbåndskode:</strong> @Model.ArmbandKode</p>
-                <p><strong>Telefon:</strong> @Model.Telefon</p>
-            </div>
-        </div>
+        <p>Du har ingen ordrer endnu.</p>
     }
+
+    <form method="post" asp-page-handler="Logout" class="mt-4">
+        <button type="submit" class="btn btn-danger">Log ud</button>
+    </form>
 </div>

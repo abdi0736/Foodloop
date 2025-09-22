@@ -11,10 +11,8 @@ namespace Foodloop.Pages
 
         public List<Models.Bod> Boder { get; set; } = new();
 
-        public void OnGet() 
+        public void OnGet()
         {
-            Boder.Clear();
-
             using var conn = new SqlConnection(_connectionString);
             conn.Open();
 

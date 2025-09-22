@@ -30,7 +30,9 @@ namespace Foodloop.Pages.Kunde
             conn.Open();
 
             var cmd = new SqlCommand(
-                "SELECT TOP 1 ArmbandKode, Efternavn, Telefon FROM Kunder WHERE ArmbandKode = @ArmbandKode AND Adgangskode = @Adgangskode",
+                "SELECT TOP 1 KundeID, ArmbandKode, Efternavn, Telefon " +
+                "FROM Kunder" +
+                " WHERE ArmbandKode = @ArmbandKode AND Adgangskode = @Adgangskode",
                 conn
             );
             cmd.Parameters.AddWithValue("@ArmbandKode", ArmbandKode);
@@ -40,9 +42,10 @@ namespace Foodloop.Pages.Kunde
             if (reader.Read())
             {
                 // Gem i session
-                HttpContext.Session.SetString("ArmbandKode", reader.GetString(0));
-                HttpContext.Session.SetString("Efternavn", reader.GetString(1));
-                HttpContext.Session.SetString("Telefon", reader.GetString(2));
+                HttpContext.Session.SetInt32("KundeID", reader.GetInt32(0)); // <-- vigtigt
+                HttpContext.Session.SetString("ArmbandKode", reader.GetString(1));
+                HttpContext.Session.SetString("Efternavn", reader.GetString(2));
+                HttpContext.Session.SetString("Telefon", reader.GetString(3));
 
                 return RedirectToPage("/Bod/KundeDashboard");
             }
@@ -55,7 +58,8 @@ namespace Foodloop.Pages.Kunde
         public IActionResult OnPostLogout()
         {
             HttpContext.Session.Clear();
-            return RedirectToPage("/Bod/KundeLogin"); // sender tilbage til login
+            return RedirectToPage("/Pages/Bod/KundeLogin");
         }
+    
     }
 }

@@ -1,0 +1,42 @@
+@page "{id:int}"
+@model Foodloop.Pages.MenuModel
+@{
+    ViewData["Title"] = "Menu - " + Model.BodNavn;
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Menu for @Model.BodNavn</h2>
+
+    @if (Model.Retter.Count == 0)
+    {
+        <div class="alert alert-info">Ingen retter fundet for denne bod.</div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var ret in Model.Retter)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@ret.Navn</h5>
+                            <p class="card-text">@ret.Beskrivelse</p>
+                            <p><strong>Pris:</strong> @ret.Pris kr.</p>
+
+                            <form method="post" asp-page-handler="AddToCart">
+                                <input type="hidden" name="madId" value="@ret.MadID" />
+                                <input type="hidden" name="navn" value="@ret.Navn" />
+                                <input type="hidden" name="pris" value="@ret.Pris" />
+                                <input type="hidden" name="bodId" value="@ret.BodID" />
+
+                                <button type="submit" class="btn btn-primary">
+                                    Læg i kurv
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

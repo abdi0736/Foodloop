@@ -1,0 +1,12 @@
+@page "{id:int}"
+@model Foodloop.Pages.Kunde.OrdreBekraeftelseModel
+@{
+    ViewData["Title"] = "Ordrebekræftelse";
+}
+
+<div class="container mt-5 text-center">
+    <h2>Tak for din bestilling!</h2>
+    <p>Din ordre er modtaget og har ID: <strong>@Model.OrdreId</strong></p>
+
+    <a asp-page="/Kunde/KundeDashboard" class="btn btn-primary mt-3">Se mine ordrer</a>
+</div>
