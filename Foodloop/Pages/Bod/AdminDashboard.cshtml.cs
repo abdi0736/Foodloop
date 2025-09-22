@@ -100,7 +100,7 @@ public class AdminDashboardModel : PageModel
     }
 
     // Delete Bod
-    public IActionResult OnPostDeleteBod()
+    public IActionResult OnPostDeleteBod() 
     {
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
@@ -117,7 +117,7 @@ public class AdminDashboardModel : PageModel
     {
         if (!Enum.TryParse<BodStatus>(NewStatus, out var status))
         {
-            status = BodStatus.Aaben;
+            status = BodStatus.Aaben; // fallback hvis parsing fejler
         }
 
         using var conn = new SqlConnection(_connectionString);

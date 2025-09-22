@@ -1,6 +1,6 @@
 @page
 @using Foodloop.Models
-@model Foodloop.Pages.Samlet
+@model Foodloop.Pages.SamletModel
 @{
     ViewData["Title"] = "Festival App - Kunde";
 }
@@ -49,7 +49,7 @@
     </div>
 </div>
 
-@section Scripts {
+@section Scripts { 
 <script>
     // Initier Leaflet-kort
     var map = L.map('map').setView([55.6171, 12.0796], 17);
