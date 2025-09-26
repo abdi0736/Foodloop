@@ -1,4 +1,5 @@
 namespace Foodloop.Models
+
 {
     public enum BodStatus
     {

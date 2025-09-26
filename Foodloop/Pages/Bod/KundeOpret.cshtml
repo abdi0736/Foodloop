@@ -1,0 +1,39 @@
+@page
+@model Foodloop.Pages.Bod.OpretModel
+@{
+    ViewData["Title"] = "Opret kunde";
+}
+
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="text-center mb-4">Opret ny kunde</h2>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-info">@Model.Message</div>
+    }
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="armband" class="form-label">Armbåndskode</label>
+            <input asp-for="ArmbandKode" class="form-control" id="armband" placeholder="Fx A123" />
+        </div>
+
+        <div class="mb-3">
+            <label for="efternavn" class="form-label">Efternavn</label>
+            <input asp-for="Efternavn" class="form-control" id="efternavn" placeholder="Indtast efternavn" />
+        </div>
+
+        <div class="mb-3">
+            <label for="telefon" class="form-label">Telefon</label>
+            <input asp-for="Telefon" class="form-control" id="telefon" placeholder="Indtast telefonnummer" />
+        </div>
+
+        <div class="mb-3">
+            <label for="adgangskode" class="form-label">Adgangskode</label>
+            <input asp-for="Adgangskode" class="form-control" id="adgangskode" type="password" placeholder="Vælg adgangskode" />
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Opret kunde</button>
+    </form>
+</div>
+
